@@ -3,7 +3,8 @@ import ErrorResponse from '../../utils/errorResponse.js';
 
 export const getArticles = async (req, res, next) => {
   try {
-    res.send('hi');
+    const articles = await ArticleModel.find();
+    res.send({ success: true, data: articles });
   } catch (error) {
     next(error);
   }
@@ -32,7 +33,7 @@ export const deleteArticle = async (req, res, next) => {
         new ErrorResponse(`Article not found with id: ${req.params.id}`, 404)
       );
     }
-    res.send('suca');
+    res.status(200).send({ success: true });
   } catch (error) {
     next(error);
   }
