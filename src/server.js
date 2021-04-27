@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import mongoose from 'mongoose';
+import { connect } from 'mongoose';
 import articlesRoutes from './routes/articles/articles.js';
 const app = express();
 
@@ -12,7 +12,15 @@ app.use(morgan('tiny'));
 app.use('/articles', articlesRoutes);
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`running on port ${PORT}`);
-});
+connect(process.env.MONGO_CONNECTION, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+})
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log('Running on port', port);
+    });
+  })
+  .catch(console.log(err));
