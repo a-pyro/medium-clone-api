@@ -1,8 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { connect } from 'mongoose';
+import mongoose from 'mongoose';
 import articlesRoutes from './routes/articles/articles.js';
+
+const { connect } = mongoose;
 const app = express();
 
 app.use(cors());
@@ -19,8 +21,8 @@ connect(process.env.MONGO_CONNECTION, {
   useUnifiedTopology: true,
 })
   .then(() => {
-    server.listen(PORT, () => {
-      console.log('Running on port', port);
+    app.listen(PORT, () => {
+      console.log('Running on port', PORT);
     });
   })
-  .catch(console.log(err));
+  .catch((err) => console.log(err));

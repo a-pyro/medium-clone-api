@@ -1,3 +1,5 @@
+import ArticleModel from '../../models/Articles.js';
+
 export const getArticles = async (req, res, next) => {
   try {
     res.send('hi');
@@ -13,6 +15,9 @@ export const getArticle = async (req, res, next) => {
 };
 export const postArticle = async (req, res, next) => {
   try {
+    const newArticle = await ArticleModel.create(req.body);
+    const { _id } = newArticle;
+    res.send({ success: true, _id });
   } catch (error) {
     next(error);
   }
