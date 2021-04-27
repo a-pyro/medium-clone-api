@@ -11,6 +11,13 @@ export const getArticles = async (req, res, next) => {
 };
 export const getArticle = async (req, res, next) => {
   try {
+    const article = await ArticleModel.findById(req.params.id);
+    if (!article) {
+      return next(
+        new ErrorResponse(`Article with id ${req.params.id} not found`)
+      );
+    }
+    res.status(200).send({ success: true, data: article });
   } catch (error) {
     next(error);
   }
