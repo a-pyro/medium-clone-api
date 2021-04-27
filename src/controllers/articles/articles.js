@@ -40,6 +40,18 @@ export const deleteArticle = async (req, res, next) => {
 };
 export const editArticle = async (req, res, next) => {
   try {
+    const article = await ArticleModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        runValidators: true,
+        new: true,
+      }
+    );
+    if (!article) {
+      return next(new ErrorResponse(`Article not found with that id`, 404));
+    }
+    res.status(200).send({ success: true, data: article });
   } catch (error) {
     next(error);
   }
