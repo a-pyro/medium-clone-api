@@ -1,4 +1,5 @@
 import ArticleModel from '../../models/Articles.js';
+import ErrorResponse from '../../utils/errorResponse.js';
 
 export const getArticles = async (req, res, next) => {
   try {
@@ -24,6 +25,14 @@ export const postArticle = async (req, res, next) => {
 };
 export const deleteArticle = async (req, res, next) => {
   try {
+    const article = await ArticleModel.findByIdAndDelete(req.params.id);
+    console.log(article);
+    if (!article) {
+      return next(
+        new ErrorResponse(`Article not found with id: ${req.params.id}`, 404)
+      );
+    }
+    res.send('suca');
   } catch (error) {
     next(error);
   }

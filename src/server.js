@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import articlesRoutes from './routes/articles/articles.js';
+import { errorHandler } from './middlewares/errors/errorHandling.js';
 
 const { connect } = mongoose;
 const app = express();
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(morgan('tiny'));
 
 app.use('/articles', articlesRoutes);
-
+app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 connect(process.env.MONGO_CONNECTION, {
   useNewUrlParser: true,
