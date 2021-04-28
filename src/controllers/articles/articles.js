@@ -93,7 +93,7 @@ export const postReview = async (req, res, next) => {
           reviews: reviewToInsert,
         },
       },
-      { runValidators: true, new: true, timestamps: true }
+      { runValidators: true, new: true, projection: { reviews: 1 } }
     );
     if (!updatedArticles)
       return next(new ErrorResponse(`article not found`, 404));
@@ -137,11 +137,21 @@ export const editReview = async (req, res, next) => {
   try {
     const userId = req.params.id;
     const reviewId = req.params.reviewId;
-    const updated = await ArticleModel.findOneAndUpdate(
-      { _id: mongoose.Types.ObjectId(userId) },
-      {}
+    const { reviews } = await ArticleModel.findOneAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(userId),
+        'reviews._id': mongoose.Types.ObjectId(reviewId),
+      },
+      { $set: { 'reviews.$': { ...req.body, _id: reviewId } } },
+      {
+        runValidators: true,
+        new: true,
+        projection: { reviews: 1 },
+        timestamps: true,
+      }
     );
-    res.status(200).send('put');
+    console.log(reviews);
+    res.status(200).send(reviews);
   } catch (error) {
     next(error);
   }
@@ -150,6 +160,18 @@ export const editReview = async (req, res, next) => {
 // DELETE articles/:id/reviews/:reviewId
 export const deleteReview = async (req, res, next) => {
   try {
+    const id = req.params.id;
+    const reviewId = req.params.reviewId;
+    const modified = await ArticleModel.findByIdAndUpdate(
+      id,
+      {
+        $pull: {
+          reviews: { _id: mongoose.Types.ObjectId(reviewId) },
+        },
+      },
+      { new: true }
+    );
+    res.status(200).send({ success: true, data: modified });
   } catch (error) {
     next(error);
   }

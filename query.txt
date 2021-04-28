@@ -1,0 +1,19 @@
+
+Find all records with isActive true
+{isActive:true}
+
+Find all records with age greater than 26 
+{age: {$gt: 26}}
+Find all records with age greater than 26 and lower or equal than 30
+{$and: [{age:{$gt:26}}, {age:{$lte:30}}]} => 19
+
+Find all records with brown or blue eyes 
+{$or: [{eyeColor:"brown"}, {eyeColor:"blue"}]} => 66
+
+Find all records with no green eyes 
+{eyeColor:{$ne: "green"}} => 66
+
+Find all records with neither green eyes nor blue 
+{$and: [{eyeColor: {$ne: 'green'}}, {eyeColor: {$ne: 'blue'}}]}
+
+Find all records with company==="FITCORE" and return email only
