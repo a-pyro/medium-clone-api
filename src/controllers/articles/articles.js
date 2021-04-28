@@ -63,3 +63,57 @@ export const editArticle = async (req, res, next) => {
     next(error);
   }
 };
+
+// GET articles/:id/reviews
+export const getReviews = async (req, res, next) => {
+  try {
+    res.send('hi');
+  } catch (error) {
+    next(error);
+  }
+};
+
+//  POST articles/:id/reviews
+export const postReview = async (req, res, next) => {
+  try {
+    const articleId = req.params.id;
+    const reviewToInsert = req.body;
+    console.log(reviewToInsert);
+    const updatedArticles = await ArticleModel.findByIdAndUpdate(
+      articleId,
+      {
+        $push: {
+          reviews: reviewToInsert,
+        },
+      },
+      { runValidators: true, new: true, timestamps: true }
+    );
+    res.send({ success: true, data: updatedArticles });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// GET articles/:id/reviews/:reviewId
+export const getSingleReview = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
+
+// PUT articles/:id/reviews/:reviewId
+export const editReview = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
+
+// DELETE articles/:id/reviews/:reviewId
+export const deleteReview = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};

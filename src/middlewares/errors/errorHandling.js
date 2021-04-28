@@ -1,5 +1,6 @@
 import ErrorResponse from '../../utils/errorResponse.js';
 export const errorHandler = async (err, req, res, next) => {
+  console.log(err);
   let error = { ...err };
   error.message = err.message;
   //mongoose bad object id
@@ -10,6 +11,7 @@ export const errorHandler = async (err, req, res, next) => {
   if (err.message.includes('validation failed')) {
     return res.status(400).send({ success: false, error: err.message });
   }
+
   res.status(error.statusCode || 500).send({
     success: false,
     error: error.message || 'internal server error',

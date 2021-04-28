@@ -5,11 +5,22 @@ import {
   getArticle,
   getArticles,
   postArticle,
+  getReviews,
+  postReview,
+  getSingleReview,
+  editReview,
+  deleteReview,
 } from '../../controllers/articles/articles.js';
 
 const router = Router();
 
 router.route('/').get(getArticles).post(postArticle);
 router.route('/:id').get(getArticle).put(editArticle).delete(deleteArticle);
+router.route('/:id/reviews').get(getReviews).post(postReview);
+router
+  .route('/:id/reviews/:reviewId')
+  .get(getSingleReview)
+  .put(editReview)
+  .delete(deleteReview);
 
 export default router;
