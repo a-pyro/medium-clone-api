@@ -1,6 +1,6 @@
 import ArticleModel from '../../models/Articles.js';
 import ErrorResponse from '../../utils/errorResponse.js';
-
+import mongoose from 'mongoose';
 export const getArticles = async (req, res, next) => {
   try {
     const articles = await ArticleModel.find();
@@ -64,7 +64,7 @@ export const editArticle = async (req, res, next) => {
   }
 };
 
-// GET articles/:id/reviews
+// GET articles/:id/reviews ✅
 export const getReviews = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -74,13 +74,13 @@ export const getReviews = async (req, res, next) => {
       _id: 0,
     });
     if (!reviews) return next(new ErrorResponse(`resource not found`, 404));
-    res.send({ success: true, data: reviews });
+    res.status(200).send({ success: true, data: reviews });
   } catch (error) {
     next(error);
   }
 };
 
-//  POST articles/:id/reviews
+//  POST articles/:id/reviews ✅
 export const postReview = async (req, res, next) => {
   try {
     const articleId = req.params.id;
@@ -98,15 +98,35 @@ export const postReview = async (req, res, next) => {
     if (!updatedArticles)
       return next(new ErrorResponse(`article not found`, 404));
     // console.log(updatedArticles);
-    res.send({ success: true, data: updatedArticles });
+    res.status(201).send({ success: true, data: updatedArticles });
   } catch (error) {
     next(error);
   }
 };
 
-// GET articles/:id/reviews/:reviewId
+// GET articles/:id/reviews/:reviewId ✅ ✍🏻
 export const getSingleReview = async (req, res, next) => {
   try {
+    const userId = req.params.id;
+    const reviewId = req.params.reviewId;
+    const { reviews } = await ArticleModel.findOne(
+      { _id: mongoose.Types.ObjectId(userId) },
+      {
+        reviews: {
+          $elemMatch: { _id: mongoose.Types.ObjectId(reviewId) },
+        },
+      }
+    );
+    // console.log(reviews);
+    if (reviews) {
+      const data = reviews.length > 0 ? reviews[0] : reviews;
+      return res.status(200).send({
+        success: true,
+        data,
+      });
+    } else {
+      return next(new ErrorResponse(`resource not found`, 404));
+    }
   } catch (error) {
     next(error);
   }
@@ -115,6 +135,13 @@ export const getSingleReview = async (req, res, next) => {
 // PUT articles/:id/reviews/:reviewId
 export const editReview = async (req, res, next) => {
   try {
+    const userId = req.params.id;
+    const reviewId = req.params.reviewId;
+    const updated = await ArticleModel.findOneAndUpdate(
+      { _id: mongoose.Types.ObjectId(userId) },
+      {}
+    );
+    res.status(200).send('put');
   } catch (error) {
     next(error);
   }
