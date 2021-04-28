@@ -1,10 +1,26 @@
 import ArticleModel from '../../models/Articles.js';
 import ErrorResponse from '../../utils/errorResponse.js';
 import mongoose from 'mongoose';
+import q2m from 'query-to-mongo';
+
 export const getArticles = async (req, res, next) => {
   try {
-    const articles = await ArticleModel.find();
-    res.send({ success: true, data: articles });
+    const { criteria, options, links } = q2m(req.query);
+    const query = q2m(req.query);
+    // console.log(criteria, skip, limit, sort, links);
+    console.log(query);
+    const total = await ArticleModel.countDocuments();
+
+    console.log(total);
+    const articles = await ArticleModel.find(criteria, options.fields)
+      .sort(options.sort)
+      .skip(options.skip)
+      .limit(options.limit);
+    res.send({
+      success: true,
+      links: links('/articles', total),
+      data: articles,
+    });
   } catch (error) {
     next(error);
   }
