@@ -88,6 +88,9 @@ export const postReview = async (req, res, next) => {
       },
       { runValidators: true, new: true, timestamps: true }
     );
+    if (!updatedArticles)
+      return next(new ErrorResponse(`article not found`, 404));
+    console.log(updatedArticles);
     res.send({ success: true, data: updatedArticles });
   } catch (error) {
     next(error);
