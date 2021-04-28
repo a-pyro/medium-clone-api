@@ -1,4 +1,14 @@
 import ErrorResponse from '../../utils/errorResponse.js';
+export const routeNotFoundHandler = (req, res, next) => {
+  if (!req.pathname) {
+    res.status(404).send({
+      success: false,
+      message: `${req.protocol}://${req.get('host')}${
+        req.originalUrl
+      } route not found`,
+    });
+  }
+};
 export const errorHandler = async (err, req, res, next) => {
   console.log(err);
   let error = { ...err };

@@ -67,7 +67,14 @@ export const editArticle = async (req, res, next) => {
 // GET articles/:id/reviews
 export const getReviews = async (req, res, next) => {
   try {
-    res.send('hi');
+    const id = req.params.id;
+
+    const reviews = await ArticleModel.findById(id, {
+      reviews: 1,
+      _id: 0,
+    });
+    if (!reviews) return next(new ErrorResponse(`resource not found`, 404));
+    res.send({ success: true, data: reviews });
   } catch (error) {
     next(error);
   }
@@ -90,7 +97,7 @@ export const postReview = async (req, res, next) => {
     );
     if (!updatedArticles)
       return next(new ErrorResponse(`article not found`, 404));
-    console.log(updatedArticles);
+    // console.log(updatedArticles);
     res.send({ success: true, data: updatedArticles });
   } catch (error) {
     next(error);
