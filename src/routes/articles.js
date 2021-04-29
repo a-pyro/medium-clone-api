@@ -10,7 +10,7 @@ import {
   getSingleReview,
   editReview,
   deleteReview,
-} from '../../controllers/articles/articles.js';
+} from '../controllers/articles.js';
 
 const router = Router();
 
