@@ -33,17 +33,7 @@ const ArticleSchema = new Schema(
       },
     },
 
-    author: {
-      name: {
-        type: String,
-        required: [true, 'Please add a author name'],
-      },
-      img: {
-        type: String,
-        required: [true, 'Please add a img'],
-        trim: true,
-      },
-    },
+    authorId: { type: String },
     cover: {
       type: String,
       required: [true, 'Please add a cover'],

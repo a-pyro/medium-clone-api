@@ -1,5 +1,6 @@
-import ArticleModel from '../../models/Articles.js';
-import ErrorResponse from '../../utils/errorResponse.js';
+import ArticleModel from '../models/Articles.js';
+import AuthorModel from '../models/Authors.js';
+import ErrorResponse from '../utils/errorResponse.js';
 import mongoose from 'mongoose';
 import q2m from 'query-to-mongo';
 
@@ -27,6 +28,7 @@ export const getArticles = async (req, res, next) => {
 };
 export const getArticle = async (req, res, next) => {
   try {
+    console.log(1000);
     const article = await ArticleModel.findById(req.params.id);
     if (!article) {
       return next(
@@ -40,8 +42,26 @@ export const getArticle = async (req, res, next) => {
 };
 export const postArticle = async (req, res, next) => {
   try {
-    const newArticle = await ArticleModel.create(req.body);
-    const { _id } = newArticle;
+    const newArticle = {
+      ...req.body,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    const savedArticle = await ArticleModel.create(newArticle);
+    const { authorId } = savedArticle;
+    const { _id } = savedArticle;
+    // pusho nell'array degli autori
+    const author = await AuthorModel.findById(authorId);
+    const updatedAuthor = await AuthorModel.findByIdAndUpdate(
+      authorId,
+      {
+        $push: {
+          articles: _id,
+        },
+      },
+      { runValidators: true, new: true }
+    );
+    console.log(author);
     res.send({ success: true, _id });
   } catch (error) {
     next(error);
@@ -63,16 +83,17 @@ export const deleteArticle = async (req, res, next) => {
 };
 export const editArticle = async (req, res, next) => {
   try {
+    const newArticle = { ...req.body, updatedAt: new Date() };
     const article = await ArticleModel.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      newArticle,
       {
         runValidators: true,
         new: true,
       }
     );
     if (!article) {
-      return next(new ErrorResponse(`Article not found with that id`, 404));
+      return next(new ErrorResponse(`resource not found with that id`, 404));
     }
     res.status(200).send({ success: true, data: article });
   } catch (error) {
