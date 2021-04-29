@@ -16,6 +16,9 @@ const router = Router();
 
 router.route('/').get(getArticles).post(postArticle);
 router.route('/:id').get(getArticle).put(editArticle).delete(deleteArticle);
+/* 
+reviews route
+*/
 router.route('/:id/reviews').get(getReviews).post(postReview);
 router
   .route('/:id/reviews/:reviewId')
