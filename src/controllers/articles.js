@@ -10,7 +10,7 @@ export const getArticles = async (req, res, next) => {
     const query = q2m(req.query);
     // console.log(criteria, skip, limit, sort, links);
     console.log(query);
-    const total = await ArticleModel.countDocuments();
+    const total = await ArticleModel.countDocuments(criteria);
 
     console.log(total);
     const articles = await ArticleModel.find(criteria, options.fields)
