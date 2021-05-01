@@ -13,6 +13,7 @@ export const getArticles = async (req, res, next) => {
     const total = await ArticleModel.countDocuments(criteria);
 
     console.log(total);
+
     const articles = await ArticleModel.find(criteria, options.fields)
       .sort(options.sort)
       .skip(options.skip)
