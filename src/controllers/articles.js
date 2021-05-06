@@ -63,7 +63,7 @@ export const postArticle = async (req, res, next) => {
       { runValidators: true, new: true }
     );
     console.log(author);
-    res.send({ success: true, _id });
+    res.status(201).send({ success: true, _id });
   } catch (error) {
     next(error);
   }
