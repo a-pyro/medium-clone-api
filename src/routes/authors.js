@@ -14,10 +14,12 @@ router.route('/register').post(addAuthor);
 
 router.route('/').get(basicAuthMiddleware, getAuthors);
 
+router.route('/me').get(basicAuthMiddleware, getAuthor);
+
 router
   .route('/:id')
   .get(getAuthor)
   .put(basicAuthMiddleware, editAuthor)
-  .delete(deleteAuthor, basicAuthMiddleware);
+  .delete(basicAuthMiddleware, deleteAuthor);
 
 export default router;

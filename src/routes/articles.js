@@ -10,12 +10,24 @@ import {
   getSingleReview,
   editReview,
   deleteReview,
+  getArticlesFromAutheiticatedUser,
 } from '../controllers/articles.js';
+import { basicAuthMiddleware } from '../middlewares/auth/index.js';
 
 const router = Router();
 
-router.route('/').get(getArticles).post(postArticle);
-router.route('/:id').get(getArticle).put(editArticle).delete(deleteArticle);
+router.route('/').get(getArticles);
+router.route('/').post(basicAuthMiddleware, postArticle);
+
+router
+  .route('/me/stories')
+  .get(basicAuthMiddleware, getArticlesFromAutheiticatedUser);
+
+router.route('/:id').get(getArticle);
+router
+  .route('/:id')
+  .put(basicAuthMiddleware, editArticle)
+  .delete(basicAuthMiddleware, deleteArticle);
 /* 
 reviews route
 */

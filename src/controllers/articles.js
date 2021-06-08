@@ -29,7 +29,6 @@ export const getArticles = async (req, res, next) => {
 };
 export const getArticle = async (req, res, next) => {
   try {
-    console.log(1000);
     const article = await ArticleModel.findById(req.params.id);
     if (!article) {
       return next(
@@ -37,6 +36,15 @@ export const getArticle = async (req, res, next) => {
       );
     }
     res.status(200).send({ success: true, data: article });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getArticlesFromAutheiticatedUser = async (req, res, next) => {
+  try {
+    const articles = await ArticleModel.find({ _id: req.user._id });
+    res.status(200).send(articles);
   } catch (error) {
     next(error);
   }

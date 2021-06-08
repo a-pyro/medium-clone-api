@@ -22,11 +22,15 @@ export const addAuthor = async (req, res, next) => {
 
 export const getAuthor = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    // const author = await AuthorModel.findAuthorWithArticles(id);
-    const author = await AuthorModel.findById(id).populate('articles');
-    if (!author) return next(new ErrorResponse(`resource not found`, 404));
-    res.status(200).send({ success: true, data: author });
+    if (req.params === 'me') {
+      res.status(200).send(req.user);
+    } else {
+      const { id } = req.params;
+      // const author = await AuthorModel.findAuthorWithArticles(id);
+      const author = await AuthorModel.findById(id).populate('articles');
+      if (!author) return next(new ErrorResponse(`resource not found`, 404));
+      res.status(200).send({ success: true, data: author });
+    }
   } catch (error) {
     next(error);
   }
