@@ -20,8 +20,11 @@
   },
   "homepage": "https://github.com/a-pyro/medium-clone-api#readme",
   "dependencies": {
+    "atob": "^2.1.2",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-list-endpoints": "^5.0.0",
     "mongoose": "^5.12.5",
     "morgan": "^1.10.0",
     "query-to-mongo": "^0.10.1"

@@ -13,7 +13,8 @@ export const getAuthors = async (req, res, next) => {
 export const addAuthor = async (req, res, next) => {
   try {
     const newAuthor = await AuthorModel.create(req.body);
-    res.status(201).send({ success: true, data: newAuthor });
+    const { _id } = newAuthor;
+    res.status(201).send({ success: true, data: _id });
   } catch (error) {
     next(error);
   }

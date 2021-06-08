@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import listEndpoints from 'express-list-endpoints';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import articlesRoutes from './routes/articles.js';
@@ -20,6 +21,8 @@ app.use('/articles', articlesRoutes);
 app.use('/authors', authorsRoutes);
 app.use(routeNotFoundHandler);
 app.use(errorHandler);
+
+console.table(listEndpoints(app));
 const PORT = process.env.PORT || 5000;
 connect(process.env.MONGO_CONNECTION, {
   useNewUrlParser: true,
