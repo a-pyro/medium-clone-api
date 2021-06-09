@@ -32,6 +32,7 @@ export const jwtAuthMiddleware = async (req, res, next) => {
     const user = await AuthorsModel.findOne({ _id: decoded._id });
 
     if (!user) throw new Error();
+    req.user = user;
     next();
   } catch (error) {
     console.log(error);

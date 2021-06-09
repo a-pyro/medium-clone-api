@@ -5,20 +5,18 @@ import {
   getAuthor,
   editAuthor,
   deleteAuthor,
+  getPersonalProfile,
 } from '../controllers/authors.js';
+import { jwtAuthMiddleware } from '../middlewares/auth/index.js';
 
 const router = Router();
 
-router.route('/register').post(addAuthor);
+// router.route('/register').post(addAuthor);
+
+router.route('/me').get(jwtAuthMiddleware, getPersonalProfile).put(editAuthor);
 
 router.route('/').get(getAuthors);
 
-router.route('/me').put(editAuthor);
-
-router
-  .route('/:id')
-  .get(getAuthor)
-
-  .delete(deleteAuthor);
+router.route('/:id').get(jwtAuthMiddleware, getAuthor).delete(deleteAuthor);
 
 export default router;
