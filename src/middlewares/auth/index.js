@@ -29,7 +29,12 @@ export const jwtAuthMiddleware = async (req, res, next) => {
   try {
     const token = req.header('Authorization').replace('Bearer ', '');
     const decoded = await verifyJWT(token);
+    const user = await AuthorsModel.findOne({ _id: decoded._id });
+
+    if (!user) throw new Error();
+    next();
   } catch (error) {
-    next(error);
+    console.log(error);
+    next(new ErrorResponse(`Please authenticate`, 401));
   }
 };
