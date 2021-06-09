@@ -38,7 +38,8 @@ export const getAuthor = async (req, res, next) => {
 
 export const editAuthor = async (req, res, next) => {
   try {
-    res.send('hi');
+    req.user.save();
+    res.send(req.user);
   } catch (error) {
     next(error);
   }

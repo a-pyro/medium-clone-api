@@ -33,7 +33,11 @@ const ArticleSchema = new Schema(
       },
     },
 
-    authorId: { type: String },
+    authorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Author',
+      required: true,
+    },
     cover: {
       type: String,
       required: [true, 'Please add a cover'],

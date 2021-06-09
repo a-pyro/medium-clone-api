@@ -18,6 +18,7 @@ const AuthorSchema = new Schema(
     email: {
       type: String,
       trim: true,
+      unique: [true, 'This email is already in use'],
       required: [true, 'Please add a author email'],
     },
     password: {
@@ -36,7 +37,10 @@ const AuthorSchema = new Schema(
       trim: true,
     },
     articles: [{ type: Schema.Types.ObjectId, ref: 'Article' }],
+    role: { type: String, required: true, enum: ['Admin', 'User'] },
+    refreshToken: { type: String },
   },
+
   { timestamps: true }
 );
 
@@ -62,13 +66,14 @@ AuthorSchema.statics.checkCredentials = async function (email, plainPwd) {
   } else return null;
 };
 
-//nascondo la pass quando la ritorno
+//nascondo la pass quando la ritorno al front
 AuthorSchema.methods.toJSON = function () {
   const user = this;
 
   const userObject = user.toObject();
 
   delete userObject.password;
+  delete userObject.refreshToken;
   delete userObject.__v;
   return userObject;
 };

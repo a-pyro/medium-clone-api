@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import mongoose from 'mongoose';
 import articlesRoutes from './routes/articles.js';
 import authorsRoutes from './routes/authors.js';
+import authRoutes from './routes/auth.js';
 import {
   errorHandler,
   routeNotFoundHandler,
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('tiny'));
 
+app.use('/auth', authRoutes);
 app.use('/articles', articlesRoutes);
 app.use('/authors', authorsRoutes);
 app.use(routeNotFoundHandler);
