@@ -6,20 +6,19 @@ import {
   editAuthor,
   deleteAuthor,
 } from '../controllers/authors.js';
-import { basicAuthMiddleware } from '../middlewares/auth/index.js';
 
 const router = Router();
 
 router.route('/register').post(addAuthor);
 
-router.route('/').get(basicAuthMiddleware, getAuthors);
+router.route('/').get(getAuthors);
 
-router.route('/me').put(basicAuthMiddleware, editAuthor);
+router.route('/me').put(editAuthor);
 
 router
   .route('/:id')
   .get(getAuthor)
 
-  .delete(basicAuthMiddleware, deleteAuthor);
+  .delete(deleteAuthor);
 
 export default router;

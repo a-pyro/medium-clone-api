@@ -12,22 +12,16 @@ import {
   deleteReview,
   getArticlesFromAutheiticatedUser,
 } from '../controllers/articles.js';
-import { basicAuthMiddleware } from '../middlewares/auth/index.js';
 
 const router = Router();
 
 router.route('/').get(getArticles);
-router.route('/').post(basicAuthMiddleware, postArticle);
+router.route('/').post(postArticle);
 
-router
-  .route('/me/stories')
-  .get(basicAuthMiddleware, getArticlesFromAutheiticatedUser);
+router.route('/me/stories').get(getArticlesFromAutheiticatedUser);
 
 router.route('/:id').get(getArticle);
-router
-  .route('/:id')
-  .put(basicAuthMiddleware, editArticle)
-  .delete(basicAuthMiddleware, deleteArticle);
+router.route('/:id').put(editArticle).delete(deleteArticle);
 /* 
 reviews route
 */
